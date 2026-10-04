@@ -1,7 +1,5 @@
-Reading copy of Non Arkaraprasertkul’s diary.
+This repository is public and belongs to Nonarkara. It is not the diary yet.
 
-The pages in this repository are the public reading copy. English is the diary. Thai and Chinese are translations only where a translation is included, and they are marked as translations.
+A CNAME file names the intended host, blog.nonarkara.org. GitHub Pages is not turned on. The name is not a live site.
 
-The intended host is blog.nonarkara.org. The CNAME file names that host. This repository does not mean the name already points here.
-
-About 1,500 images still live on WordPress, at the addresses already in the entries.
+The reading copy could not be pushed from the Origin draft. This environment can create the repository and commit text files as Nonarkara, and it cannot git push. The GitHub command-line client is not logged in, and there is no GitHub token in the shell. Font files cannot be committed through the text file API without being rewritten as UTF-8. There is no tool here that can call the GitHub Pages API.
