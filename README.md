@@ -30,7 +30,9 @@ Images used in the posts are mirrored under `media/` when the file could be fetc
 
 ## Pages
 
-This is static HTML. GitHub Pages can serve the `main` branch from the site root. There is no build step. `.nojekyll` is present so Jekyll does not rewrite the diary. `CNAME` is `blog.nonarkara.org`.
+This is static HTML. There is no build step. `.nojekyll` is present so Jekyll does not rewrite the diary. `CNAME` is `blog.nonarkara.org`.
+
+GitHub Pages should serve the `main` branch from the site root (`/`). The publish token used here can push the files and cannot turn Pages on (the Pages API returned 403). In the repository: Settings → Pages → Deploy from a branch → `main` and `/ (root)`. Links in the HTML are root-absolute, for `blog.nonarkara.org`, not for a `/blog/` project-site prefix.
 
 Fonts are self-hosted (Source Serif 4, Noto Serif Thai, Noto Serif SC).
 
