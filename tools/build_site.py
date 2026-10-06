@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the static diary for blog.nonarkara.org.
+"""Build the static diary for diary.nonarkara.org.
 
 Reads the unpacked WordPress export (default /tmp/wp-export) and writes HTML
 into the repository root. Images are rewritten through media/map.json when a
@@ -20,6 +20,8 @@ from pathlib import Path
 from bs4 import BeautifulSoup, Comment, NavigableString, Tag
 
 ROOT = Path(__file__).resolve().parents[1]
+SITE_HOST = "diary.nonarkara.org"
+SITE = f"https://{SITE_HOST}"
 sys.path.insert(0, str(ROOT / "tools"))
 from i18n_posts import BODIES, HAND  # noqa: E402
 
@@ -787,9 +789,9 @@ def render_404():
 
 
 def render_sitemap(rels: list[str]) -> None:
-    urls = ["https://blog.nonarkara.org/", "https://blog.nonarkara.org/about/", "https://blog.nonarkara.org/english-only/"]
-    urls += [f"https://blog.nonarkara.org{rel}" for rel in rels]
-    urls += [f"https://blog.nonarkara.org/rooms/{slug}/" for slug, *_ in ROOMS]
+    urls = [f"{SITE}/", f"{SITE}/about/", f"{SITE}/english-only/"]
+    urls += [f"{SITE}{rel}" for rel in rels]
+    urls += [f"{SITE}/rooms/{slug}/" for slug, *_ in ROOMS]
     body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
     body += "\n".join(f"  <url><loc>{esc(u)}</loc></url>" for u in urls)
     body += "\n</urlset>\n"
@@ -799,7 +801,7 @@ def render_sitemap(rels: list[str]) -> None:
 def render_readme(posts, pages, changed_count):
     missing = sorted(UNMIRRORED)
     lines = "\n".join(f"- {u}" for u in missing) if missing else "- None."
-    text = f"""# blog.nonarkara.org
+    text = f"""# {SITE_HOST}
 
 Public archive of the diary Non Arkaraprasertkul kept at [nonharvard.wordpress.com](https://nonharvard.wordpress.com).
 
@@ -821,11 +823,15 @@ Images used in the posts are mirrored under `media/` when the file could be fetc
 
 ## Pages
 
-This is static HTML. GitHub Pages can serve the `main` branch from the site root. There is no build step. `.nojekyll` is present so Jekyll does not rewrite the diary. `CNAME` is `blog.nonarkara.org`.
+This is static HTML. There is no build step. `.nojekyll` is present so Jekyll does not rewrite the diary. `CNAME` is `{SITE_HOST}`.
+
+GitHub Pages should serve the `main` branch from the site root (`/`). The publish token used here can push the files and cannot turn Pages on (the Pages API returned 403). Do not enable GitHub Pages through the API when it returns 403. Non must: Settings → Pages → Deploy from a branch → `main` → `/ (root)`, then add the custom domain `{SITE_HOST}`. Links in the HTML are root-absolute, for `{SITE_HOST}`, not for a `/blog/` project-site prefix.
+
+`blog.nonarkara.org` already hosts a different Cloudflare Pages archive (“Dr Non ● Arkara — the archive”). Leave that hostname and that site alone.
 
 Fonts are self-hosted (Source Serif 4, Noto Serif Thai, Noto Serif SC).
 
-DNS, which only Non can set: a CNAME record for `blog.nonarkara.org` pointing at `nonarkara.github.io`. After it resolves, HTTPS can be turned on in the repository’s GitHub Pages settings.
+DNS, which only Non can set: CNAME name `diary` → `nonarkara.github.io`. After `{SITE_HOST}` resolves, HTTPS can be turned on in the repository’s GitHub Pages settings.
 
 To rebuild from the WordPress export, unpack it and run `python3 tools/build_site.py` with the export at `/tmp/wp-export`. The generator does not publish account metadata from the export.
 """
@@ -871,7 +877,7 @@ def main() -> None:
     render_404()
     render_sitemap([rel for _, rel, _ in located])
     (ROOT / ".nojekyll").write_text("")
-    (ROOT / "CNAME").write_text("blog.nonarkara.org\n")
+    (ROOT / "CNAME").write_text(SITE_HOST + "\n")
     render_readme(posts, pages, changed)
     print("posts", len(posts), "pages", len(pages), "changed", changed)
     print("unmirrored", len(UNMIRRORED))

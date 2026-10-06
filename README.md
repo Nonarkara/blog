@@ -1,4 +1,4 @@
-# blog.nonarkara.org
+# diary.nonarkara.org
 
 Public archive of the diary Non Arkaraprasertkul kept at [nonharvard.wordpress.com](https://nonharvard.wordpress.com).
 
@@ -30,12 +30,14 @@ Images used in the posts are mirrored under `media/` when the file could be fetc
 
 ## Pages
 
-This is static HTML. There is no build step. `.nojekyll` is present so Jekyll does not rewrite the diary. `CNAME` is `blog.nonarkara.org`.
+This is static HTML. There is no build step. `.nojekyll` is present so Jekyll does not rewrite the diary. `CNAME` is `diary.nonarkara.org`.
 
-GitHub Pages should serve the `main` branch from the site root (`/`). The publish token used here can push the files and cannot turn Pages on (the Pages API returned 403). In the repository: Settings → Pages → Deploy from a branch → `main` and `/ (root)`. Links in the HTML are root-absolute, for `blog.nonarkara.org`, not for a `/blog/` project-site prefix.
+GitHub Pages should serve the `main` branch from the site root (`/`). The publish token used here can push the files and cannot turn Pages on (the Pages API returned 403). Do not enable GitHub Pages through the API when it returns 403. Non must: Settings → Pages → Deploy from a branch → `main` → `/ (root)`, then add the custom domain `diary.nonarkara.org`. Links in the HTML are root-absolute, for `diary.nonarkara.org`, not for a `/blog/` project-site prefix.
+
+`blog.nonarkara.org` already hosts a different Cloudflare Pages archive (“Dr Non ● Arkara — the archive”). Leave that hostname and that site alone.
 
 Fonts are self-hosted (Source Serif 4, Noto Serif Thai, Noto Serif SC).
 
-DNS, which only Non can set: a CNAME record for `blog.nonarkara.org` pointing at `nonarkara.github.io`. After it resolves, HTTPS can be turned on in the repository’s GitHub Pages settings.
+DNS, which only Non can set: CNAME name `diary` → `nonarkara.github.io`. After `diary.nonarkara.org` resolves, HTTPS can be turned on in the repository’s GitHub Pages settings.
 
 To rebuild from the WordPress export, unpack it and run `python3 tools/build_site.py` with the export at `/tmp/wp-export`. The generator does not publish account metadata from the export.
