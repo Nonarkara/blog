@@ -132,6 +132,19 @@ def esc(s: str) -> str:
     return escape(s or "", quote=True)
 
 
+DEFAULT_DESC = "Public archive of Non Arkaraprasertkul’s diary from nonharvard.wordpress.com."
+
+
+def clip(text: str, n: int = 155) -> str:
+    text = re.sub(r"\s+", " ", text or "").strip()
+    if not text:
+        return DEFAULT_DESC
+    if len(text) <= n:
+        return text
+    cut = text[:n].rsplit(" ", 1)[0].rstrip(".,;:—-")
+    return (cut or text[:n].rstrip()) + "…"
+
+
 def fmt_date(iso: str) -> str:
     d = dt.date.fromisoformat(iso[:10])
     return f"{d.day} {MONTHS[d.month]} {d.year}"
@@ -489,18 +502,39 @@ def footer() -> str:
 </footer>"""
 
 
-def shell(title: str, body: str) -> str:
+def shell(title: str, body: str, path: str = "/", description: str | None = None, noindex: bool = False) -> str:
+    desc = esc(clip(description) if description else DEFAULT_DESC)
+    safe_title = esc(title)
+    canon = ""
+    robots = ""
+    if noindex:
+        robots = '<meta name="robots" content="noindex">\n'
+    else:
+        href = SITE if path == "/" else f"{SITE}{path}"
+        og_type = "article" if re.match(r"^/(\d{4}|pages)/", path) else "website"
+        canon = (
+            f'<link rel="canonical" href="{esc(href)}">\n'
+            f'<meta property="og:site_name" content="Non Arkaraprasertkul">\n'
+            f'<meta property="og:title" content="{safe_title}">\n'
+            f'<meta property="og:description" content="{desc}">\n'
+            f'<meta property="og:url" content="{esc(href)}">\n'
+            f'<meta property="og:type" content="{og_type}">\n'
+            f'<meta name="twitter:card" content="summary">\n'
+            f'<meta name="twitter:title" content="{safe_title}">\n'
+            f'<meta name="twitter:description" content="{desc}">\n'
+            f'<link rel="sitemap" type="application/xml" href="/sitemap.xml">\n'
+        )
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{esc(title)}</title>
-<meta name="description" content="Public archive of Non Arkaraprasertkul’s diary from nonharvard.wordpress.com.">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>{safe_title}</title>
+<meta name="description" content="{desc}">
+{robots}{canon}<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/fonts/fonts.css">
 <link rel="stylesheet" href="/assets/site.css">
-<script>try{{var l=localStorage.getItem('diary-lang');if(l==='th'||l==='zh'){{document.documentElement.setAttribute('data-lang',l);document.documentElement.lang=l==='zh'?'zh-Hans':l;}}}}catch(e){{}}</script>
+<script>try{{var l=localStorage.getItem('diary-lang');if(l==='th'||l==='zh'){{document.documentElement.setAttribute('data-lang',l);document.documentElement.lang=l==='zh'?'zh-Hans':l;}}var c=localStorage.getItem('diary-copy');if(c==='original')document.documentElement.setAttribute('data-copy','original');}}catch(e){{}}</script>
 </head>
 <body>
 {header()}
@@ -648,7 +682,7 @@ def render_entry(d, rel, kind, tool, cache, href_map, prev_item, next_item, marg
   </article>
 </main>"""
     page_title = f"{title} — Non Arkaraprasertkul"
-    write(ROOT / rel.strip("/") / "index.html", shell(page_title, body))
+    write(ROOT / rel.strip("/") / "index.html", shell(page_title, body, rel, clip(reading.get_text(" ", strip=True))))
     return changed
 
 
@@ -680,6 +714,7 @@ def render_index(posts_located, pages_located):
   <form class="find" action="#" onsubmit="return false">
     <label for="q">{tri("Find an entry", "หาบันทึก", "找一篇")}</label>
     <input id="q" type="search" autocomplete="off">
+    <p class="find-status" id="find-status" role="status" hidden><span class="ti en"></span><span class="ti th"></span><span class="ti zh"></span></p>
   </form>
   {''.join(blocks)}
   <section class="pages-block">
@@ -692,7 +727,7 @@ def render_index(posts_located, pages_located):
     <ol class="toc">{''.join(page_items)}</ol>
   </section>
 </main>"""
-    write(ROOT / "index.html", shell("Non Arkaraprasertkul — Diary", body))
+    write(ROOT / "index.html", shell("Non Arkaraprasertkul — Diary", body, "/", lede_en))
 
 
 def render_about():
@@ -733,7 +768,8 @@ def render_about():
     {margin_html("hindsight")}
   </article>
 </main>"""
-    write(ROOT / "about" / "index.html", shell("About — Non Arkaraprasertkul", body))
+    about_desc = "Three dates: 14 September 2015, when he started the diary; 15 April 2025, when he returned; and 4 October 2026, the later margin."
+    write(ROOT / "about" / "index.html", shell("About — Non Arkaraprasertkul", body, "/about/", about_desc))
 
 
 def render_english_only(posts_located):
@@ -764,7 +800,7 @@ def render_english_only(posts_located):
     </div>
   </div>
 </main>"""
-    write(ROOT / "english-only" / "index.html", shell("English only — Non Arkaraprasertkul", body))
+    write(ROOT / "english-only" / "index.html", shell("English only — Non Arkaraprasertkul", body, "/english-only/", en))
 
 
 def render_rooms():
@@ -776,7 +812,7 @@ def render_rooms():
   <div class="tb th"><p>ยังไม่มีบันทึกที่อ้างอิงได้</p></div>
   <div class="tb zh"><p>还没有可依据的笔记。</p></div>
 </main>"""
-        write(ROOT / "rooms" / slug / "index.html", shell(f"{en} — Non Arkaraprasertkul", body))
+        write(ROOT / "rooms" / slug / "index.html", shell(f"{en} — Non Arkaraprasertkul", body, f"/rooms/{slug}/", "No note has been sourced."))
 
 
 def render_404():
@@ -785,7 +821,7 @@ def render_404():
   <h1>{tri("This page is not in the diary.", "ไม่มีหน้านี้ในบันทึก", "日记里没有这一页。")}</h1>
   <p><a href="/">{tri("Back to the diary", "กลับไปที่บันทึก", "回到日记")}</a></p>
 </main>"""
-    write(ROOT / "404.html", shell("Not in the diary", body))
+    write(ROOT / "404.html", shell("Not in the diary", body, "/404.html", "This page is not in the diary.", noindex=True))
 
 
 def render_sitemap(rels: list[str]) -> None:
@@ -827,7 +863,7 @@ This is static HTML. There is no build step. `.nojekyll` is present so Jekyll do
 
 GitHub Pages should serve the `main` branch from the site root (`/`). The publish token used here can push the files and cannot turn Pages on (the Pages API returned 403). Do not enable GitHub Pages through the API when it returns 403. Non must: Settings → Pages → Deploy from a branch → `main` → `/ (root)`, then add the custom domain `{SITE_HOST}`. Links in the HTML are root-absolute, for `{SITE_HOST}`, not for a `/blog/` project-site prefix.
 
-`blog.nonarkara.org` already hosts a different Cloudflare Pages archive (“Dr Non ● Arkara — the archive”). Leave that hostname and that site alone.
+`blog.nonarkara.org` already hosts a different Cloudflare Pages archive (“Dr Non ● Arkara — the archive”). Leave that hostname and that site alone. Each diary page has a canonical URL and an Open Graph description on `{SITE_HOST}`. `robots.txt` points at the sitemap.
 
 Fonts are self-hosted (Source Serif 4, Noto Serif Thai, Noto Serif SC).
 
@@ -878,6 +914,7 @@ def main() -> None:
     render_sitemap([rel for _, rel, _ in located])
     (ROOT / ".nojekyll").write_text("")
     (ROOT / "CNAME").write_text(SITE_HOST + "\n")
+    (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
     render_readme(posts, pages, changed)
     print("posts", len(posts), "pages", len(pages), "changed", changed)
     print("unmirrored", len(UNMIRRORED))

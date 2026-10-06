@@ -34,7 +34,7 @@ This is static HTML. There is no build step. `.nojekyll` is present so Jekyll do
 
 GitHub Pages should serve the `main` branch from the site root (`/`). The publish token used here can push the files and cannot turn Pages on (the Pages API returned 403). Do not enable GitHub Pages through the API when it returns 403. Non must: Settings → Pages → Deploy from a branch → `main` → `/ (root)`, then add the custom domain `diary.nonarkara.org`. Links in the HTML are root-absolute, for `diary.nonarkara.org`, not for a `/blog/` project-site prefix.
 
-`blog.nonarkara.org` already hosts a different Cloudflare Pages archive (“Dr Non ● Arkara — the archive”). Leave that hostname and that site alone.
+`blog.nonarkara.org` already hosts a different Cloudflare Pages archive (“Dr Non ● Arkara — the archive”). Leave that hostname and that site alone. Each diary page has a canonical URL and an Open Graph description on `diary.nonarkara.org`. `robots.txt` points at the sitemap.
 
 Fonts are self-hosted (Source Serif 4, Noto Serif Thai, Noto Serif SC).
 

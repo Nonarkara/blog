@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://diary.nonarkara.org/sitemap.xml

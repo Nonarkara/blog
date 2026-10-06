@@ -142,6 +142,16 @@ h3 { font-weight: 600; font-size: 1.2rem; }
   outline: none;
   border-bottom: 2px solid var(--amber);
 }
+.find-status {
+  margin: 0.45rem 0 0;
+  font-size: 0.98rem;
+}
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+}
 
 .year { margin: 1.6rem 0 2rem; }
 .year h2 { margin: 0 0 0.4rem; }
@@ -280,8 +290,8 @@ h3 { font-weight: 600; font-size: 1.2rem; }
 
 .room { max-width: 40rem; }
 
-body:not([data-copy="original"]) .copy-original { display: none; }
-body[data-copy="original"] .copy-reading { display: none; }
+html:not([data-copy="original"]) .copy-original { display: none; }
+html[data-copy="original"] .copy-reading { display: none; }
 
 html:not([data-lang="th"]):not([data-lang="zh"]) .ti.th,
 html:not([data-lang="th"]):not([data-lang="zh"]) .ti.zh,
