@@ -88,6 +88,12 @@ PAGE_SLUGS = {
     4993: "12-rules-for-life",
 }
 
+REMOTE_NOTES = {
+    "https://i00.i.aliimg.com/photo/v0/60124409486/Classic_style_bamboo_shape_customize_400ml_both.jpg": "Origin returns HTTP 404 with a 100×100 placeholder JPEG. The Wayback Machine has no capture.",
+    "https://sbt.blob.core.windows.net/storyboards/mhernandez3388/tragedy-of-the-commons.png": "Origin blob returns 404. Wayback timestamps that were tried also returned 404.",
+    "https://www3.nhk.or.jp/nhkworld/upld/thumbnails/en/tv/japanrailway/tv_episode_3025995_201510010600_03_large.jpg": "Origin returns 404 HTML. Wayback CDX has no capture.",
+}
+
 ROOMS = [
     ("demon", "Demon", "ปีศาจ", "恶魔"),
     ("vice", "Vice", "อบายมุข", "恶习"),
@@ -115,6 +121,23 @@ def canon(url: str) -> str:
     url = re.sub(r"^https://i\d\.wp\.com/", "https://", url)
     url = url.replace("http://", "https://")
     return url
+
+
+def canon_image(url: str) -> str:
+    """Like canon(), but keep the query when the picture's identity is the query.
+
+    Khaleej Times crop URLs are https://image.khaleejtimes.com/?uuid=… with an
+    empty path. Stripping the query would collapse two different photographs
+    onto one map key.
+    """
+    raw = unescape(url or "").replace("&amp;", "&").split("#")[0]
+    base, _, query = raw.partition("?")
+    base = re.sub(r"^https://i\d\.wp\.com/", "https://", base)
+    base = base.replace("http://", "https://")
+    path = re.sub(r"^https?://[^/]+", "", base)
+    if query and path in {"", "/"}:
+        return f"{base}?{query}"
+    return base
 
 
 def load_map() -> dict:
@@ -272,7 +295,7 @@ def apply_hand(soup: BeautifulSoup, post_id: int) -> None:
 
 
 def local_image(url: str) -> str:
-    c = canon(url)
+    c = canon_image(url)
     if c in IMG_MAP:
         return "/" + IMG_MAP[c]
     if c:
@@ -283,11 +306,11 @@ def local_image(url: str) -> str:
 def rewrite_links(soup: BeautifulSoup, href_map: dict) -> None:
     for a in soup.find_all("a"):
         href = a.get("href") or ""
-        c = canon(href)
+        c = canon_image(href)
         if c in IMG_MAP:
             a["href"] = "/" + IMG_MAP[c]
             continue
-        key = c.rstrip("/")
+        key = canon(href).rstrip("/")
         if key in href_map:
             a["href"] = href_map[key]
         elif "nonharvard.wordpress.com" in href and "?p=" in href:
@@ -791,14 +814,10 @@ def render_english_only(posts_located):
     th = "ภาษาไทยและภาษาจีนบนไซต์นี้ครอบคลุมกรอบของไซต์ บันทึกชิ้นแรก วันที่ 9 (สามปีในเซี่ยงไฮ้) และการกลับมาในวันที่ 15 เมษายน 2025 อีกหนึ่งร้อยยี่สิบสามชิ้นคงเป็นภาษาอังกฤษของเขา หน้านี้มีไว้เพื่อไม่ให้การไม่มีคำแปลถูกเข้าใจว่าแปลจบแล้ว"
     zh = "本站的泰语和中文只覆盖站点的框架、第一篇、第9日（在上海的三年），以及2025年4月15日的归来。其余一百二十三篇仍是他的英文。这一页在这里，是为了不把“没有译文”误当成“已经译完”。"
     body = f"""<main class="sheet" id="content">
-  <div class="entry no-margin">
-    <div class="text">
-      <p class="kicker">{tri("English only", "ยังเป็นภาษาอังกฤษ", "仅英文")}</p>
-      <h1>{tri("What is translated", "สิ่งที่แปลแล้ว", "译了什么")}</h1>
-      <div class="lede"><p class="tb en">{en}</p><p class="tb th">{th}</p><p class="tb zh">{zh}</p></div>
-      <ol class="toc">{''.join(items)}</ol>
-    </div>
-  </div>
+  <p class="kicker">{tri("English only", "ยังเป็นภาษาอังกฤษ", "仅英文")}</p>
+  <h1>{tri("What is translated", "สิ่งที่แปลแล้ว", "译了什么")}</h1>
+  <div class="lede"><p class="tb en">{en}</p><p class="tb th">{th}</p><p class="tb zh">{zh}</p></div>
+  <ol class="toc">{''.join(items)}</ol>
 </main>"""
     write(ROOT / "english-only" / "index.html", shell("English only — Non Arkaraprasertkul", body, "/english-only/", en))
 
@@ -836,7 +855,13 @@ def render_sitemap(rels: list[str]) -> None:
 
 def render_readme(posts, pages, changed_count):
     missing = sorted(UNMIRRORED)
-    lines = "\n".join(f"- {u}" for u in missing) if missing else "- None."
+    if missing:
+        lines = "\n".join(
+            f"- {u}" + (f" — {REMOTE_NOTES[u]}" if u in REMOTE_NOTES else "")
+            for u in missing
+        )
+    else:
+        lines = "- None."
     text = f"""# {SITE_HOST}
 
 Public archive of the diary Non Arkaraprasertkul kept at [nonharvard.wordpress.com](https://nonharvard.wordpress.com).
@@ -853,19 +878,23 @@ Six later rooms are names only. They stay empty until a real sourced note exists
 
 ## Images
 
-Images used in the posts are mirrored under `media/` when the file could be fetched, so the diary can still be read if WordPress goes away. Hotlinked files that could not be fetched stay as remote URLs:
+Images used in the posts are mirrored under `media/` when `media/map.json` has a local file, so the diary can still be read if WordPress goes away. Nine hotlinks that previously failed were copied in from the Internet Archive after the origin stopped returning the file. A check of the live WordPress.com API (126 posts and 6 pages) found no other post image missing from this mirror. Hotlinked files that still cannot be fetched stay as remote URLs:
 
 {lines}
 
+## Design
+
+The essay stays a serif column on paper `#fff4d8`. Chrome, year plates, day markers, and margins use the Palette reading-room chord: Wada orange `#f99d1b`, deep blue `#12354e`, black `#101010`, and the about red `#a72144` as a rare year band. These are screen conversions, not claims about printed ink. Archivo Narrow is the chrome face.
+
 ## Pages
 
-This is static HTML. There is no build step. `.nojekyll` is present so Jekyll does not rewrite the diary. `CNAME` is `{SITE_HOST}`.
+This is static HTML. `.nojekyll` is present so Jekyll does not rewrite the diary. `CNAME` is `{SITE_HOST}` and must stay that hostname.
 
 GitHub Pages should serve the `main` branch from the site root (`/`). The publish token used here can push the files and cannot turn Pages on (the Pages API returned 403). Do not enable GitHub Pages through the API when it returns 403. Non must: Settings → Pages → Deploy from a branch → `main` → `/ (root)`, then add the custom domain `{SITE_HOST}`. Links in the HTML are root-absolute, for `{SITE_HOST}`, not for a `/blog/` project-site prefix.
 
-`blog.nonarkara.org` already hosts a different Cloudflare Pages archive (“Dr Non ● Arkara — the archive”). Leave that hostname and that site alone. Each diary page has a canonical URL and an Open Graph description on `{SITE_HOST}`. `robots.txt` points at the sitemap.
+`blog.nonarkara.org` is a different site: a Cloudflare Pages archive titled “Dr Non ● Arkara — the archive”. It is not this diary. Do not point that hostname at this repository, and do not overwrite that Cloudflare Pages project. Each diary page has a canonical URL and an Open Graph description on `{SITE_HOST}`. `robots.txt` points at the sitemap.
 
-Fonts are self-hosted (Source Serif 4, Noto Serif Thai, Noto Serif SC).
+Fonts are self-hosted (Source Serif 4, Noto Serif Thai, Noto Serif SC for the entry; Archivo Narrow for chrome). Reading copies were not regenerated for the Palette restyle.
 
 DNS, which only Non can set: CNAME name `diary` → `nonarkara.github.io`. After `{SITE_HOST}` resolves, HTTPS can be turned on in the repository’s GitHub Pages settings.
 

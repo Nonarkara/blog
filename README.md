@@ -14,29 +14,25 @@ Six later rooms are names only. They stay empty until a real sourced note exists
 
 ## Images
 
-Images used in the posts are mirrored under `media/` when the file could be fetched, so the diary can still be read if WordPress goes away. Hotlinked files that could not be fetched stay as remote URLs:
+Images used in the posts are mirrored under `media/` when `media/map.json` has a local file, so the diary can still be read if WordPress goes away. Nine hotlinks that previously failed were copied in from the Internet Archive after the origin stopped returning the file. A check of the live WordPress.com API (126 posts and 6 pages) found no other post image missing from this mirror. Hotlinked files that still cannot be fetched stay as remote URLs:
 
-- https://cdn.zenpencils.com/wp-content/uploads/2012-11-13-chrisg.jpg
-- https://i00.i.aliimg.com/photo/v0/60124409486/Classic_style_bamboo_shape_customize_400ml_both.jpg
-- https://image.khaleejtimes.com/
-- https://izquotes.com/quotes-pictures/quote-freedom-is-alone-the-unoriginated-birthright-of-man-it-belongs-to-him-by-force-of-his-humanity-immanuel-kant-367294.jpg
-- https://quotespictures.com/wp-content/uploads/2013/07/we-buy-things-we-dont-need-with-money-we-dont-have-to-impress-people-we-dont-like.jpg
-- https://sbt.blob.core.windows.net/storyboards/mhernandez3388/tragedy-of-the-commons.png
-- https://shanghaiist.com/upload/2015/10/hapless-taxi-driver-death-2.JPG
-- https://theviewinside.me/wp-content/uploads/2014/05/graph.png
-- https://www.ceoblog.co/wp-content/uploads/2016/12/ceo-richard-branson.jpg
-- https://www.pocketbook.co.uk/wp-content/uploads/2017/04/richard-thaler-cass-sunstein.jpg
-- https://www3.nhk.or.jp/nhkworld/upld/thumbnails/en/tv/japanrailway/tv_episode_3025995_201510010600_03_large.jpg
+- https://i00.i.aliimg.com/photo/v0/60124409486/Classic_style_bamboo_shape_customize_400ml_both.jpg — Origin returns HTTP 404 with a 100×100 placeholder JPEG. The Wayback Machine has no capture.
+- https://sbt.blob.core.windows.net/storyboards/mhernandez3388/tragedy-of-the-commons.png — Origin blob returns 404. Wayback timestamps that were tried also returned 404.
+- https://www3.nhk.or.jp/nhkworld/upld/thumbnails/en/tv/japanrailway/tv_episode_3025995_201510010600_03_large.jpg — Origin returns 404 HTML. Wayback CDX has no capture.
+
+## Design
+
+The essay stays a serif column on paper `#fff4d8`. Chrome, year plates, day markers, and margins use the Palette reading-room chord: Wada orange `#f99d1b`, deep blue `#12354e`, black `#101010`, and the about red `#a72144` as a rare year band. These are screen conversions, not claims about printed ink. Archivo Narrow is the chrome face.
 
 ## Pages
 
-This is static HTML. There is no build step. `.nojekyll` is present so Jekyll does not rewrite the diary. `CNAME` is `diary.nonarkara.org`.
+This is static HTML. `.nojekyll` is present so Jekyll does not rewrite the diary. `CNAME` is `diary.nonarkara.org` and must stay that hostname.
 
 GitHub Pages should serve the `main` branch from the site root (`/`). The publish token used here can push the files and cannot turn Pages on (the Pages API returned 403). Do not enable GitHub Pages through the API when it returns 403. Non must: Settings → Pages → Deploy from a branch → `main` → `/ (root)`, then add the custom domain `diary.nonarkara.org`. Links in the HTML are root-absolute, for `diary.nonarkara.org`, not for a `/blog/` project-site prefix.
 
-`blog.nonarkara.org` already hosts a different Cloudflare Pages archive (“Dr Non ● Arkara — the archive”). Leave that hostname and that site alone. Each diary page has a canonical URL and an Open Graph description on `diary.nonarkara.org`. `robots.txt` points at the sitemap.
+`blog.nonarkara.org` is a different site: a Cloudflare Pages archive titled “Dr Non ● Arkara — the archive”. It is not this diary. Do not point that hostname at this repository, and do not overwrite that Cloudflare Pages project. Each diary page has a canonical URL and an Open Graph description on `diary.nonarkara.org`. `robots.txt` points at the sitemap.
 
-Fonts are self-hosted (Source Serif 4, Noto Serif Thai, Noto Serif SC).
+Fonts are self-hosted (Source Serif 4, Noto Serif Thai, Noto Serif SC for the entry; Archivo Narrow for chrome). Reading copies were not regenerated for the Palette restyle.
 
 DNS, which only Non can set: CNAME name `diary` → `nonarkara.github.io`. After `diary.nonarkara.org` resolves, HTTPS can be turned on in the repository’s GitHub Pages settings.
 
