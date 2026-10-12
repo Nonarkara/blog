@@ -8,7 +8,11 @@ The reading copy mends grammar. The unedited original sits on the same page. Tit
 
 Thai and Chinese cover the site frame, the first entry, Day 9 (Three Years in Shanghai), and the return of 15 April 2025. The other entries stay in his English.
 
-The About page is three dates only: 14 September 2015, 15 April 2025, and 4 October 2026. The same later distance is in the margin of the first entry, the return, and About. The Shanghai entry’s margin is limited to the fieldwork note (resident from 21 June 2013, after visits 2006–2013; Jing’an Villa near Nanjing West Road) and the later reading edition at [shanghai.nonarkara.org](https://shanghai.nonarkara.org), which the 2015 post did not know.
+The About page is three dates only: 14 September 2015, 15 April 2025, and 4 October 2026. The same later distance is in the margin of the first entry, the return, and About. The Shanghai entry’s margin is limited to the fieldwork note (resident from 21 June 2013, after visits 2006–2013) and the later reading edition at [shanghai.nonarkara.org](https://shanghai.nonarkara.org), which the 2015 post did not know.
+
+## What this public copy includes
+
+The old site is the author’s public diary: essays on writing, teaching, design, books, and a life he chose to set down for a reader. This tree keeps those essays. It leaves out entries whose subject is a private person, a family member’s private life, a medical episode, personal money, contact details, or a home. Where a public essay only contained a sentence or a photograph of that kind, the essay stays and that part is marked as removed. The generator skips the same entries on a rebuild (`tools/redact_public.py`). Git history is not rewritten.
 
 Six later rooms are names only. They stay empty until a real sourced note exists.
 
