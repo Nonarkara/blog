@@ -110,9 +110,9 @@ HINDSIGHT = {
 }
 
 SHANGHAI = {
-    "en": "Resident fieldwork in Shanghai began on 21 June 2013, after visits from 2006 to 2013. He lived at Jing’an Villa, near Nanjing West Road. A later public reading edition of the Shanghai work is at <a href=\"https://shanghai.nonarkara.org\">shanghai.nonarkara.org</a>. The 2015 post did not know that site.",
-    "th": "งานภาคสนามแบบพำนักในเซี่ยงไฮ้เริ่มวันที่ 21 มิถุนายน 2013 หลังจากไปเยือนระหว่างปี 2006 ถึง 2013 เขาอยู่ที่จิงอันวิลลา ใกล้ถนนหนานจิงตะวันตก ฉบับอ่านสาธารณะในภายหลังของงานเซี่ยงไฮ้อยู่ที่ <a href=\"https://shanghai.nonarkara.org\">shanghai.nonarkara.org</a> บทความปี 2015 ยังไม่รู้จักไซต์นั้น",
-    "zh": "在上海的驻地田野开始于2013年6月21日，在此之前是2006年至2013年的访问。他住在静安别墅，靠近南京西路。上海作品后来的公开阅读版在 <a href=\"https://shanghai.nonarkara.org\">shanghai.nonarkara.org</a>。2015年的这篇还不知道那个站点。",
+    "en": "Resident fieldwork in Shanghai began on 21 June 2013, after visits from 2006 to 2013. A later public reading edition of the Shanghai work is at <a href=\"https://shanghai.nonarkara.org\">shanghai.nonarkara.org</a>. The 2015 post did not know that site.",
+    "th": "งานภาคสนามแบบพำนักในเซี่ยงไฮ้เริ่มวันที่ 21 มิถุนายน 2013 หลังจากไปเยือนระหว่างปี 2006 ถึง 2013 ฉบับอ่านสาธารณะในภายหลังของงานเซี่ยงไฮ้อยู่ที่ <a href=\"https://shanghai.nonarkara.org\">shanghai.nonarkara.org</a> บทความปี 2015 ยังไม่รู้จักไซต์นั้น",
+    "zh": "在上海的驻地田野开始于2013年6月21日，在此之前是2006年至2013年的访问。上海作品后来的公开阅读版在 <a href=\"https://shanghai.nonarkara.org\">shanghai.nonarkara.org</a>。2015年的这篇还不知道那个站点。",
 }
 
 
@@ -727,9 +727,9 @@ def render_index(posts_located, pages_located):
     for d, rel, _ in pages_located:
         title = unescape(d["title"] or "")
         page_items.append(f'<li><a href="{rel}"><span class="ttl">{esc(title)}</span></a></li>')
-    lede_en = "A public archive of the diary kept at nonharvard.wordpress.com, from 14 September 2015 to 30 November 2025. One hundred and twenty-six entries. The reading copy mends grammar. The unedited original sits beside it. Titles are as he published them."
-    lede_th = "หอจดหมายเหตุสาธารณะของบันทึกที่ nonharvard.wordpress.com ตั้งแต่วันที่ 14 กันยายน 2015 ถึง 30 พฤศจิกายน 2025 หนึ่งร้อยยี่สิบหกชิ้น สำเนาสำหรับอ่านแก้ไวยากรณ์ ต้นฉบับที่ไม่ได้แก่อยู่ข้างกัน ชื่อเรื่องเป็นอย่างที่เขาเผยแพร่"
-    lede_zh = "nonharvard.wordpress.com 上那本日记的公开存档，自2015年9月14日至2025年11月30日。一百二十六篇。阅读稿只补语法。未经修改的原文并置在旁。标题照他发表时的样子，不动。"
+    lede_en = "A public archive of the diary kept at nonharvard.wordpress.com, from 14 September 2015 to 30 November 2025. Essays he wrote for a reader stay. Entries about a private person, family, health, money, or a home do not. The reading copy mends grammar. The unedited original sits beside it. Titles are as he published them."
+    lede_th = "หอจดหมายเหตุสาธารณะของบันทึกที่ nonharvard.wordpress.com ตั้งแต่วันที่ 14 กันยายน 2015 ถึง 30 พฤศจิกายน 2025 บทความที่เขาเขียนให้ผู้อ่านคงอยู่ บันทึกที่เกี่ยวกับบุคคลส่วนตัว ครอบครัว สุขภาพ เงิน หรือบ้าน ไม่ได้เผยแพร่ที่นี่ สำเนาสำหรับอ่านแก้ไวยากรณ์ ต้นฉบับที่ไม่ได้แก่อยู่ข้างกัน ชื่อเรื่องเป็นอย่างที่เขาเผยแพร่"
+    lede_zh = "nonharvard.wordpress.com 上那本日记的公开存档，自2015年9月14日至2025年11月30日。他写给读者的文章留在这里。关于私人、家人、健康、金钱或住所的篇目不在此公开。阅读稿只补语法。未经修改的原文并置在旁。标题照他发表时的样子，不动。"
     body = f"""<main class="sheet" id="content">
   <p class="kicker">{tri("Diary", "บันทึก", "日记")}</p>
   <h1>{tri("Non Arkaraprasertkul", "นน อัครประเสริฐกุล", "Non Arkaraprasertkul")}</h1>
@@ -743,9 +743,9 @@ def render_index(posts_located, pages_located):
   <section class="pages-block">
     <h2>{tri("Pages from the old site", "หน้าจากไซต์เก่า", "旧站上的页面")}</h2>
     <p>{tri(
-        "Six WordPress pages came with the export. They are not counted among the one hundred and twenty-six entries. The 2015 about page is one of them. This site’s About is separate.",
-        "มีหน้าเวิร์ดเพรสหกหน้ามากับไฟล์ส่งออก ไม่นับในหนึ่งร้อยยี่สิบหกชิ้น หน้าเกี่ยวกับของปี 2015 เป็นหนึ่งในนั้น หน้าเกี่ยวกับของไซต์นี้แยกต่างหาก",
-        "导出里有六篇 WordPress 页面。它们不算在一百二十六篇之内。2015年的关于页是其中之一。本站的关于页是另外一页。",
+        "Six WordPress pages came with the export. They are not counted among the diary entries. The 2015 about page is one of them. This site’s About is separate.",
+        "มีหน้าเวิร์ดเพรสหกหน้ามากับไฟล์ส่งออก ไม่นับในบันทึก หน้าเกี่ยวกับของปี 2015 เป็นหนึ่งในนั้น หน้าเกี่ยวกับของไซต์นี้แยกต่างหาก",
+        "导出里有六篇 WordPress 页面。它们不算在日记篇目之内。2015年的关于页是其中之一。本站的关于页是另外一页。",
     )}</p>
     <ol class="toc">{''.join(page_items)}</ol>
   </section>
@@ -810,9 +810,9 @@ def render_english_only(posts_located):
         items.append(
             f'<li><a href="{rel}"><time datetime="{iso}">{esc(fmt_date(iso))}</time> <span class="ttl">{esc(title)}</span></a></li>'
         )
-    en = "Thai and Chinese on this site cover the frame, the first entry, Day 9 (Three Years in Shanghai), and the return of 15 April 2025. The other one hundred and twenty-three entries stay in his English. This page is here so that absence is not mistaken for a finished translation."
-    th = "ภาษาไทยและภาษาจีนบนไซต์นี้ครอบคลุมกรอบของไซต์ บันทึกชิ้นแรก วันที่ 9 (สามปีในเซี่ยงไฮ้) และการกลับมาในวันที่ 15 เมษายน 2025 อีกหนึ่งร้อยยี่สิบสามชิ้นคงเป็นภาษาอังกฤษของเขา หน้านี้มีไว้เพื่อไม่ให้การไม่มีคำแปลถูกเข้าใจว่าแปลจบแล้ว"
-    zh = "本站的泰语和中文只覆盖站点的框架、第一篇、第9日（在上海的三年），以及2025年4月15日的归来。其余一百二十三篇仍是他的英文。这一页在这里，是为了不把“没有译文”误当成“已经译完”。"
+    en = "Thai and Chinese on this site cover the frame, the first entry, Day 9 (Three Years in Shanghai), and the return of 15 April 2025. The other entries stay in his English. This page is here so that absence is not mistaken for a finished translation."
+    th = "ภาษาไทยและภาษาจีนบนไซต์นี้ครอบคลุมกรอบของไซต์ บันทึกชิ้นแรก วันที่ 9 (สามปีในเซี่ยงไฮ้) และการกลับมาในวันที่ 15 เมษายน 2025 ชิ้นที่เหลือคงเป็นภาษาอังกฤษของเขา หน้านี้มีไว้เพื่อไม่ให้การไม่มีคำแปลถูกเข้าใจว่าแปลจบแล้ว"
+    zh = "本站的泰语和中文只覆盖站点的框架、第一篇、第9日（在上海的三年），以及2025年4月15日的归来。其余各篇仍是他的英文。这一页在这里，是为了不把“没有译文”误当成“已经译完”。"
     body = f"""<main class="sheet" id="content">
   <p class="kicker">{tri("English only", "ยังเป็นภาษาอังกฤษ", "仅英文")}</p>
   <h1>{tri("What is translated", "สิ่งที่แปลแล้ว", "译了什么")}</h1>
@@ -872,7 +872,11 @@ The reading copy mends grammar. The unedited original sits on the same page. Tit
 
 Thai and Chinese cover the site frame, the first entry, Day 9 (Three Years in Shanghai), and the return of 15 April 2025. The other entries stay in his English.
 
-The About page is three dates only: 14 September 2015, 15 April 2025, and 4 October 2026. The same later distance is in the margin of the first entry, the return, and About. The Shanghai entry’s margin is limited to the fieldwork note (resident from 21 June 2013, after visits 2006–2013; Jing’an Villa near Nanjing West Road) and the later reading edition at [shanghai.nonarkara.org](https://shanghai.nonarkara.org), which the 2015 post did not know.
+The About page is three dates only: 14 September 2015, 15 April 2025, and 4 October 2026. The same later distance is in the margin of the first entry, the return, and About. The Shanghai entry’s margin is limited to the fieldwork note (resident from 21 June 2013, after visits 2006–2013) and the later reading edition at [shanghai.nonarkara.org](https://shanghai.nonarkara.org), which the 2015 post did not know.
+
+## What this public copy includes
+
+The old site is the author’s public diary: essays on writing, teaching, design, books, and a life he chose to set down for a reader. This tree keeps those essays. It leaves out entries whose subject is a private person, a family member’s private life, a medical episode, personal money, contact details, or a home. Where a public essay only contained a sentence or a photograph of that kind, the essay stays and that part is marked as removed. The generator skips the same entries on a rebuild (`tools/redact_public.py`). Git history is not rewritten.
 
 Six later rooms are names only. They stay empty until a real sourced note exists.
 
@@ -918,7 +922,10 @@ def main() -> None:
     cache = json.loads(cache_path.read_text()) if cache_path.exists() else {}
     posts, pages = load_entries()
     located, href_map = entry_paths(posts, pages)
-    post_located = [x for x in located if x[2] == "post"]
+    from redact_public import WITHHELD_SLUGS
+
+    post_located = [x for x in located if x[2] == "post" and x[0].get("slug") not in WITHHELD_SLUGS]
+    located = [x for x in located if not (x[2] == "post" and x[0].get("slug") in WITHHELD_SLUGS)]
     page_located = [x for x in located if x[2] == "page"]
     changed = 0
     margins = {4: "hindsight", 83: "shanghai", 5144: "hindsight"}
@@ -945,6 +952,9 @@ def main() -> None:
     (ROOT / "CNAME").write_text(SITE_HOST + "\n")
     (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
     render_readme(posts, pages, changed)
+    from redact_public import apply as redact_public_tree
+
+    redact_public_tree(ROOT)
     print("posts", len(posts), "pages", len(pages), "changed", changed)
     print("unmirrored", len(UNMIRRORED))
     print("grammar edits", len(GRAMMAR_LOG))
